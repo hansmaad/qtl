@@ -37,8 +37,9 @@ public:
     typedef typename detail::order_by_vector<Range>::vector_type buffer;
     typedef typename detail::order_by_vector<Range>::iterator_type iterator;
 
-    order_by_range(Range&& r, Func compare) : 
-        range_(std::move(r)), compare_(compare)
+    template<typename R>
+    order_by_range(R&& r, Func compare) : 
+        range_(std::forward<R>(r)), compare_(compare)
     {
 
     }
@@ -79,9 +80,10 @@ struct default_order_by
     typedef std::less<value_type> default_compare;
     typedef order_by_range<Range, default_compare> type;
 
-    static type create(Range&& r)
+    template<typename R>
+    static type create(R&& r)
     {
-        return type(std::move(r), default_compare());
+        return type(std::forward<R>(r), default_compare());
     }
 };
 
@@ -89,13 +91,13 @@ struct default_order_by
 template<typename Range, typename Func>
 order_by_range<Range, Func> make_order_by_range(Range&& r, Func compare)
 {
-    return order_by_range<Range, Func>(std::move(r), compare);
+    return order_by_range<Range, Func>(std::forward<Range>(r), compare);
 }
 
 template<typename Range>
 typename default_order_by<Range>::type make_order_by_range(Range&& r)
 {
-    return default_order_by<Range>::create(std::move(r));
+    return default_order_by<Range>::create(std::forward<Range>(r));
 }
 
 

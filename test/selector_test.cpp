@@ -3,7 +3,7 @@
 #include <boost/test/unit_test.hpp>
 #include "test_tools.hpp"
 #include "qtl/qtl.hpp"
-#include "selector.hpp"
+#include "qtl/selector.hpp"
 
 using qtl::from;
 using qtl::raw_pointer;

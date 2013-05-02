@@ -10,25 +10,26 @@ template<typename Range, typename Func>
 class any_query : public boolean_query<any_query<Range, Func>>
 {
 public:
-    explicit any_query(Range&& r, Func predicate):
-        range_(std::move(r)), predicate_(predicate)
+    template<typename R>
+    any_query(R&& r, Func predicate):
+        range(std::forward<R>(r)), predicate(predicate)
     {
     }
 
     bool boolean_test() const
     {
-        for(auto it = begin(range_), last = end(range_);
+        for(auto it = begin(range), last = end(range);
             it != last; ++it)
         {
-            if (predicate_(*it))
+            if (predicate(*it))
                 return true;
         }
         return false;
     }
 
 private:
-    Range range_;
-    Func predicate_;
+    Range range;
+    Func predicate;
 };
 
 }

@@ -1,8 +1,6 @@
 #ifndef QSL_SELECT_HPP
 #define QSL_SELECT_HPP
 
-#include "qtl_config.h"
-
 #include <iterator>
 #include <type_traits>
 #include "range.hpp"
@@ -107,10 +105,11 @@ class select_range : public range<
 public:
     typedef select_iterator<typename Range::iterator, Func> iterator;
 
-    select_range(Range&& r, Func selector) : 
+    template<typename R>
+    select_range(R&& r, Func selector) : 
         begin_(r.begin(), selector),
         end_(r.end(), selector),
-        range_(std::move(r))
+        range_(std::forward<R>(r))
     {
     }
 

@@ -1,6 +1,8 @@
 #ifndef QTL_RETURN_TYPE_HPP
 #define QTL_RETURN_TYPE_HPP
 
+#define HAS_RESULTOF_LAMBDA 1
+
 #ifdef HAS_RESULTOF_LAMBDA
 #include <type_traits>
 #endif
@@ -21,7 +23,7 @@ template <typename R, typename C, typename A> R return_type(R (C::*)(A) const);
 template<typename Functor, typename InputArgument>
 struct function_traits
 {
-    typedef typename std::result_of<Function(InputArgument)>::type return_type;
+    typedef typename std::result_of<Functor(InputArgument)>::type return_type;
 };
 
 #else

@@ -3,6 +3,20 @@
 
 #include <iterator>
 
+
+#ifdef QTL_HAS_RVALUE_QUALIFIER
+
+#define QTL_RVALUE_QUALIFIER &&
+#define QTL_MOVE_THIS std::move(static_cast<T&>(*this))
+
+#else
+
+#define QTL_RVALUE_QUALIFIER 
+#define QTL_MOVE_THIS(T) *(static_cast<T*>(this))
+
+#endif
+
+
 namespace qtl
 {
 
@@ -21,28 +35,28 @@ template<typename Derived, typename Iter>
 class range
 {
 public:
+    range() 
+    {}
+
+    range(range&&)
+    {}
+
     template<typename Func>
-    where_range<Derived, Func> where(Func predicate)
+    where_range<Derived, Func> where(Func predicate) QTL_RVALUE_QUALIFIER
     {
-        return where_range<Derived, Func>(
-            static_cast<Derived&&>(*this), predicate
-            );
+        return where_range<Derived, Func>(move_this(), predicate);
     }
 
     template<typename Func>
-    select_range<Derived, Func> select(Func predicate)
+    select_range<Derived, Func> select(Func predicate) QTL_RVALUE_QUALIFIER
     {
-        return select_range<Derived, Func>(
-            static_cast<Derived&&>(*this), predicate
-            );
+        return select_range<Derived, Func>(move_this(), predicate);
     }
 
     template<typename Func>
-    order_by_range<Derived, Func> order_by(Func compare)
+    order_by_range<Derived, Func> order_by(Func compare) QTL_RVALUE_QUALIFIER
     {
-        return make_order_by_range(
-            static_cast<Derived&&>(*this),
-            compare);
+        return make_order_by_range(move_this(), compare);
     }
 
     /// @brief  Determines whether all elements of a 
@@ -52,7 +66,7 @@ public:
     //           source sequence passes the test in the specified predicate, 
     //           or if the sequence is empty; otherwise, false.
     template<typename Func>
-    all_query<Derived, Func> all(Func predicate)
+    all_query<Derived, Func> all(Func predicate) QTL_RVALUE_QUALIFIER
     {
         return all_query<Derived, Func>(move_this(), predicate);
     }
@@ -64,17 +78,17 @@ public:
     ///          source sequence pass the test in the specified predicate; 
     ///          otherwise, false.
     template<typename Func>
-    any_query<Derived, Func> any(Func predicate)
+    any_query<Derived, Func> any(Func predicate) QTL_RVALUE_QUALIFIER
     {
         return any_query<Derived, Func>(move_this(), predicate);
     }
 
-    empty_query<Derived> empty()
+    empty_query<Derived> empty() QTL_RVALUE_QUALIFIER
     {
         return empty_query<Derived>(move_this());
     }
 
-    sum_query<Derived> sum()
+    sum_query<Derived> sum() QTL_RVALUE_QUALIFIER
     {
         return sum_query<Derived>(move_this());
     }
@@ -89,14 +103,16 @@ public:
         return static_cast<const Derived*>(this)->get_end();
     }
 
-protected:
-    Derived&& move_this()
+protected:     
+    Derived move_this() QTL_RVALUE_QUALIFIER
     {
-        return static_cast<Derived&&>(*this);
+        return QTL_MOVE_THIS(Derived);
+
     }
 
-    ~range(){}
-
+private:
+    //range(const range&);
+    //void operator=(const range&);
 };
 
 template<typename Iter>
@@ -107,11 +123,15 @@ public:
 
     iterator_range(Iter first, Iter last) : begin_(first), end_(last) {}
 
+    iterator_range(iterator_range&& other) :
+        begin_(other.begin_), end_(other.end_)
+    {}
+
     Iter get_begin() const { return begin_; }
     Iter get_end() const { return end_; }
+
 private:
     Iter begin_, end_;
-
 };
 
 

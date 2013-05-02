@@ -41,4 +41,5 @@ BOOST_AUTO_TEST_CASE(Any_LastIsTrue_IsFalse)
     auto query = from(input).any(size_is_three);
     BOOST_CHECK(query);
 }
+
 BOOST_AUTO_TEST_SUITE_END()

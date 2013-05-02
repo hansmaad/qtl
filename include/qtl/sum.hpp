@@ -17,15 +17,16 @@ public:
     typedef std::iterator_traits<iterator> iterator_traits;
     typedef typename iterator_traits::value_type result_type;
 
-    explicit sum_query(Range&& r) :
-        range_(std::move(r))
+    template<typename R>
+    explicit sum_query(R&& r) :
+        range(std::forward<R>(r))
     {
     }
 
     operator result_type() const
     {
         return std::accumulate(
-            begin(range_), end(range_), default_value());
+            begin(range), end(range), default_value());
     }
 
     result_type default_value() const
@@ -34,8 +35,7 @@ public:
     }
 
 private:
-    Range range_;
-
+    Range range;
 };
 
 

@@ -76,35 +76,41 @@ struct sequence : public range<sequence<T>, sequence_iterator<T>>
     typedef sequence<T> my_sequence;
 
     sequence(iterator first, iterator last) : 
-        first_(first), last_(last)
+        first(first), last(last)
     {}
 
-    my_sequence& increment(T inc)
+    sequence(sequence&& other) : 
+        first(other.first), last(other.last)
+    {}
+
+    my_sequence increment(T inc) const
     {
-        first_.set_increment(inc);
-        last_.set_increment(inc);
-        return *this;
+        my_sequence s(first, last);
+        s.first.set_increment(inc);
+        s.last.set_increment(inc);
+        return s;
     }
 
-    iterator get_begin() const { return first_; }
-    iterator get_end() const { return last_; }
+    iterator get_begin() const { return first; }
+    iterator get_end() const { return last; }
 private:
-    iterator first_, last_;
+    iterator first, last;
 };
 
 
 template<typename T>
 class sequence_generator
 {
-    T from_;
+    T from;
 public:
-    sequence_generator(T from) : from_(from) 
+    sequence_generator(T from) : from(from) 
     {}
 
     sequence<T> to(T to)
     {
-        T end = to > from_ ? to + T(1) : to - T(1);
-        return sequence<T>(sequence_iterator<T>(from_, end, T(1)),
+        T end = to > from ? to + T(1) : to - T(1);
+        return sequence<T>(
+            sequence_iterator<T>(from, end, T(1)),
             sequence_iterator<T>(end, end, T(1)));
     }
 };

@@ -45,8 +45,9 @@ class where_range : public range<
 public:
     typedef where_iterator<typename Range::iterator, Func> iterator;
 
-    where_range(Range&& r, Func predicate) : 
-        range_(std::move(r)),
+    template<typename R>
+    where_range(R&& r, Func predicate) : 
+        range_(std::forward<R>(r)),
         begin_(range_.begin(), range_.end(), predicate), 
         end_(range_.end(), range_.end(), predicate)
     {

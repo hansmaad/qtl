@@ -7,7 +7,7 @@
 #include <boost/test/unit_test.hpp>
 #include "test_tools.hpp"
 #include "qtl/qtl.hpp"
-#include "predicate.hpp"
+#include "qtl/predicate.hpp"
 
 using qtl::from;
 

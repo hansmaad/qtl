@@ -2,11 +2,11 @@
 MESSAGE(STATUS "Setting up qtl library...")
 
 # configuration header for compiler or os specific stuff
-SET (QTL_CONFIG_HEADER "${CMAKE_BINARY_DIR}/include/qtl/qtl_config.h")
-CONFIGURE_FILE(
-    "${CMAKE_SOURCE_DIR}/cmake/qtl_config.cmake.h.in"
-    "${QTL_CONFIG_HEADER}"
-    )
+#SET (QTL_CONFIG_HEADER "${CMAKE_BINARY_DIR}/include/qtl/qtl_config.h")
+#CONFIGURE_FILE(
+#    "${CMAKE_SOURCE_DIR}/cmake/qtl_config.cmake.h.in"
+#    "${QTL_CONFIG_HEADER}"
+#    )
 
 # set a list with all header files
 SET (HEADER_FILES
