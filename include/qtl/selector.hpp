@@ -60,6 +60,22 @@ inline raw_ptr_selector raw_pointer()
     return raw_ptr_selector();
 }
 
+struct first_selector
+{
+    template<typename Pair>
+    auto operator()(Pair& p) -> decltype(p.first)
+    {
+        return p.first;
+    }
+
+    template<typename Pair>
+    auto operator()(const Pair& p) -> decltype(p.first)
+    {
+        return p.first;
+    }
+};
+
+typedef first_selector key_selector;
 
 }
 

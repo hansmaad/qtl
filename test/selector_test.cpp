@@ -1,5 +1,6 @@
 #include <array>
 #include <vector>
+#include <map>
 #include <boost/test/unit_test.hpp>
 #include "test_tools.hpp"
 #include "qtl/qtl.hpp"
@@ -37,6 +38,18 @@ BOOST_AUTO_TEST_CASE(Pointer_IntArray_ReturnsPointer)
     auto query = from(input).select(pointer());
     std::vector<const int*> result(begin(query), end(query));
     BOOST_CHECK(result.at(0) == &input[0]);
+}
+
+BOOST_AUTO_TEST_CASE(KeySelector_SelectKeysFromStdMap)
+{
+    typedef std::map<std::string, int> Map;
+    Map m;
+    m["A"] = 1;
+    m["B"] = 2;
+    m["C"] = 3;
+    auto keys = from(m).select(qtl::key_selector());
+    std::string expected[] = {"A", "B", "C"};
+    CheckEqualRange(expected, keys);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

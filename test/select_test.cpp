@@ -114,4 +114,16 @@ BOOST_AUTO_TEST_CASE(Select_ConstReferenceFunctor_Is123)
     TestResultIsEqualToInput(Functor);
 }
 
+BOOST_AUTO_TEST_CASE(Select_SelectKeysFromStdMap)
+{
+    typedef std::map<std::string, int> Map;
+    Map m;
+    m["A"] = 1;
+    m["B"] = 2;
+    m["C"] = 3;
+    auto keys = from(m).select([](const Map::value_type& p) { return p.first; });
+    std::string expected[] = {"A", "B", "C"};
+    CheckEqualRange(expected, keys);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
