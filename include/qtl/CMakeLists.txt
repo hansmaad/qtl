@@ -13,6 +13,7 @@ SET (HEADER_FILES
      all_query.hpp
      any_query.hpp
      boolean_query.hpp
+	 distinct.hpp
      empty_query.hpp
      iterator.hpp
      join.hpp

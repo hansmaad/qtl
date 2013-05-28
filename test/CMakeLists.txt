@@ -9,6 +9,7 @@ SET (UNIT_TEST_HEADER
 SET (UNIT_TEST_SRC 
      all_test.cpp
      any_test.cpp
+	 distinct_test.cpp
      from_test.cpp
      order_by_test.cpp
      predicate_test.cpp
