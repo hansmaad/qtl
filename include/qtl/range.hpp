@@ -30,6 +30,8 @@ class select_range;
 template<typename Range, typename Func>
 class order_by_range;
 
+template<typename Range>
+class distinct_range;
 
 template<typename Derived, typename Iter>
 class range
@@ -57,6 +59,11 @@ public:
     order_by_range<Derived, Func> order_by(Func compare) QTL_RVALUE_QUALIFIER
     {
         return make_order_by_range(move_this(), compare);
+    }
+
+    distinct_range<Derived> distinct() QTL_RVALUE_QUALIFIER
+    {
+        return make_distinct_range(move_this());
     }
 
     /// @brief  Determines whether all elements of a 

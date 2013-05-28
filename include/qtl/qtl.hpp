@@ -10,5 +10,6 @@
 #include "select.hpp"
 #include "sequence.hpp"
 #include "order_by.hpp"
+#include "distinct.hpp"
 
 #endif  // QTL_QTL_HPP
