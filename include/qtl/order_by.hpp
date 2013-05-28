@@ -5,7 +5,7 @@
 #include <functional>
 #include <iterator>
 #include "iterator.hpp"
-
+#include "type_traits.hpp"
 
 namespace qtl
 {
@@ -16,15 +16,10 @@ namespace detail
 template<typename Range>
 struct order_by_vector
 {
-    typedef typename Range::iterator iterator;
-    typedef const typename std::iterator_traits<iterator>::reference const_reference;
-    typedef typename std::remove_reference<const_reference>::type value_type;
-    typedef std::reference_wrapper<value_type> reference_wrapper;
+    typedef typename qtl::const_reference_wrapper<Range>::type reference_wrapper;
     typedef std::vector<reference_wrapper> vector_type;
     typedef typename vector_type::const_iterator iterator_type;
 };
-
-
 
 }
 
@@ -44,12 +39,14 @@ public:
 
     }
 
+    // const but not thread safe!!
     iterator get_begin() const 
-    { 
+    {         
         execute();
         return buffer_.begin(); 
     }
 
+    // const but not thread safe!!
     iterator get_end() const 
     { 
         execute();
@@ -62,7 +59,7 @@ private:
         if (buffer_.empty())
         {
             for(auto it = range_.begin(), last = range_.end(); it != last; ++it)
-                buffer_.push_back(std::ref(*it));
+                buffer_.push_back(*it);
             std::sort(buffer_.begin(), buffer_.end(), compare_);
         }
     }

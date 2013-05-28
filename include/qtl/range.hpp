@@ -30,13 +30,17 @@ class select_range;
 template<typename Range, typename Func>
 class order_by_range;
 
-template<typename Range>
+template<typename Range, typename Hasher>
 class distinct_range;
+
+struct distinct_default_hash;
 
 template<typename Derived, typename Iter>
 class range
 {
 public:
+    typedef Iter iterator;
+
     range() 
     {}
 
@@ -61,9 +65,15 @@ public:
         return make_order_by_range(move_this(), compare);
     }
 
-    distinct_range<Derived> distinct() QTL_RVALUE_QUALIFIER
+    distinct_range<Derived, distinct_default_hash> distinct() QTL_RVALUE_QUALIFIER 
     {
         return make_distinct_range(move_this());
+    }
+
+    template<typename Hasher>
+    distinct_range<Derived, Hasher> distinct(Hasher hasher) QTL_RVALUE_QUALIFIER 
+    {
+        return make_distinct_range(move_this(), hasher);
     }
 
     /// @brief  Determines whether all elements of a 

@@ -53,14 +53,33 @@ std::string MakeRangeMessage(Iter1 first1, Iter1 last1, Iter2 first2, Iter2 last
     using std::begin;
     using std::end;
     std::ostringstream s;
-    s << "[";
+    s << "[... ";
     for(;first1 != last1; ++first1)
         s << *first1 << ";";
-    s << "] != [";
+    s << "] != [... ";
     for(;first2 != last2; ++first2)
-        s << *first2 << " ";
+        s << *first2 << ";";
     s << "]";
     return s.str();
+}
+
+
+template<typename Iter1, typename Iter2>
+void CheckEqualRange(Iter1 first1, Iter1 last1, Iter2 first2, Iter2 last2)
+{
+    for(;;)
+    {
+        if(first1 == last1)
+        {
+            BOOST_CHECK_MESSAGE(first2 == last2, "Ranges don't match in size");
+            return;
+        }
+        else if (first2 == last2)
+            BOOST_FAIL("Ranges don't match in size");
+        if (!(*first1 == *first2))
+            BOOST_FAIL(MakeRangeMessage(first1, last1, first2, last2));
+        ++first1; ++first2;
+    }
 }
 
 template<typename Range1, typename Range2>
@@ -68,9 +87,8 @@ void CheckEqualRange(const Range1& r1, const Range2& r2)
 {
     using std::begin;
     using std::end;
-    BOOST_CHECK_MESSAGE(
-        Equal(begin(r1), end(r1), begin(r2), end(r2)),
-        MakeRangeMessage(begin(r1), end(r1), begin(r2), end(r2)));
+
+    CheckEqualRange(begin(r1), end(r1), begin(r2), end(r2));
 }
 
 

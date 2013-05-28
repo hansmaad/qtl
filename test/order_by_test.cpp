@@ -20,4 +20,11 @@ BOOST_AUTO_TEST_CASE(OrderBy_312Default_Is123)
     CheckEqualRange(expected, query);
 }
 
+BOOST_AUTO_TEST_CASE(OrderBy_Sequence)
+{    
+    std::array<int, 3> expected = {3, 2, 1};
+    auto query = from(1).to(3).order_by(std::greater<int>());
+    CheckEqualRange(expected, query);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
