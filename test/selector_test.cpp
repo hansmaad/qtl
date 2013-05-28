@@ -52,4 +52,16 @@ BOOST_AUTO_TEST_CASE(KeySelector_SelectKeysFromStdMap)
     CheckEqualRange(expected, keys);
 }
 
+BOOST_AUTO_TEST_CASE(ValueSelector_SelectValuesFromStdMap)
+{
+    typedef std::map<std::string, int> Map;
+    Map m;
+    m["A"] = 1;
+    m["B"] = 2;
+    m["C"] = 3;
+    auto values = from(m).select(qtl::value_selector());
+    int expected[] = {1, 2, 3};
+    CheckEqualRange(expected, values);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

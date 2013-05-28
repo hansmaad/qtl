@@ -77,6 +77,23 @@ struct first_selector
 
 typedef first_selector key_selector;
 
+struct second_selector
+{
+    template<typename Pair>
+    auto operator()(Pair& p) -> decltype(p.second)
+    {
+        return p.second;
+    }
+
+    template<typename Pair>
+    auto operator()(const Pair& p) -> decltype(p.second)
+    {
+        return p.second;
+    }
+};
+
+typedef second_selector value_selector;
+
 }
 
 #endif  // QTL_SELECTOR_HPP
